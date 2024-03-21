@@ -1,9 +1,14 @@
-export const calculateTimeDifference = (timePlaced) => {
-  const now = new Date();
-  const placed = new Date(timePlaced);
-  const difference = now.getTime() - placed; // time in milliseconds
-
+// src/utils/timeUtils.js
+export const calculateTimeInMinutes = (startTime, endTime = Date.now()) => {
+  if (typeof startTime !== "number" || typeof endTime !== "number") {
+    console.error("Invalid startTime or endTime:", startTime, endTime);
+    return "Invalid time"; // Error message to display in the UI
+  }
+  const difference = endTime - startTime;
   const minutes = Math.floor(difference / 60000);
-  const seconds = ((difference % 60000) / 1000).toFixed(0);
-  return `${minutes} min ${seconds < 10 ? "0" : ""}${seconds} sec`;
+  return `${minutes} min`;
+};
+
+export const isOverThreeMinutes = (timestamp) => {
+  return calculateTimeInMinutes(timestamp) > 3;
 };

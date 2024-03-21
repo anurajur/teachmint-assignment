@@ -21,14 +21,16 @@
 
 /* Order card styles */
 .order-card {
-  margin: 8px;
+  margin: auto;
+  margin-bottom: 10px;
   padding: 16px;
   border: 2px solid #000;
-  border-radius: 4px;
+  border-radius: 30px;
   position: relative;
+  width: 300px;
 }
 
-.order-placed {
+/* .order-placed {
   background-color: #ffdddd;
 }
 
@@ -42,7 +44,7 @@
 
 .order-picked {
   background-color: #ddddff;
-}
+} */
 
 .next-button {
   position: absolute;
@@ -195,4 +197,19 @@ th {
   margin-top: 20px;
   border-top: 2px solid black;
   padding-top: 10px;
+}
+
+.over-three-minutes {
+  border-color: red;
+  /* Example to highlight orders over 3 minutes in the same stage */
+}
+
+.order-card.over-three-minutes {
+  background-color: red;
+  /* Or any shade of red you prefer */
+}
+
+.highlight-red {
+  background-color: #af2b2b;
+  /* Light red background */
 }

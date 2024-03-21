@@ -1,11 +1,10 @@
-// components/PizzaForm.js
+// src/components/PizzaForm.js
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPizza } from "../store/actions";
 
 const PizzaForm = () => {
   const dispatch = useDispatch();
-  const maxOrders = 10;
   const orders = useSelector((state) => state.orders);
   const [formData, setFormData] = useState({
     type: "Veg",
@@ -17,19 +16,18 @@ const PizzaForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    if (orders.length < maxOrders) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (orders.length < 10) {
       dispatch(addPizza(formData));
     } else {
-      alert("Not taking any order for now");
+      alert("Not taking any more orders for now.");
     }
   };
 
   return (
-    <div className="pizza-form grid-item">
-      {" "}
-      {/* Updated with grid-item */}
-      <h2>Pizza Order Form</h2>
+    <form className="pizza-form" onSubmit={handleSubmit}>
+      {/* Form fields for type, size, and base */}
       <div>
         <label>
           Type:
@@ -58,8 +56,8 @@ const PizzaForm = () => {
           </select>
         </label>
       </div>
-      <button onClick={handleSubmit}>Place Order</button>
-    </div>
+      <button type="submit">Place Order</button>
+    </form>
   );
 };
 

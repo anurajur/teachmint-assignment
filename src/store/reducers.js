@@ -1,46 +1,45 @@
-// reducer.js
+// src/store/reducer.js
 import { ADD_PIZZA, ADVANCE_ORDER, CANCEL_ORDER } from "./actions";
 
 const initialState = {
   orders: [],
 };
 
+const getNextStatus = (currentStatus) => {
+  const statusFlow = [
+    "Order Placed",
+    "Order in Making",
+    "Order Ready",
+    "Order Picked",
+  ];
+  const currentIndex = statusFlow.indexOf(currentStatus);
+  return currentIndex !== -1 && currentIndex < statusFlow.length - 1
+    ? statusFlow[currentIndex + 1]
+    : currentStatus;
+};
+
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_PIZZA:
-      const newOrder = {
-        ...action.payload,
-        status: "Order Placed",
-        timePlaced: Date.now(), // Store the timestamp instead of remainingTime
-      };
       return {
         ...state,
-        orders: [...state.orders, newOrder],
+        orders: [
+          ...state.orders,
+          { ...action.payload, status: "Order Placed" },
+        ],
       };
     case ADVANCE_ORDER:
       return {
         ...state,
-        orders: state.orders.map((order) => {
-          if (order.id === action.payload) {
-            let newStatus;
-            switch (order.status) {
-              case "Order Placed":
-                newStatus = "Order in Making";
-                break;
-              case "Order in Making":
-                newStatus = "Order Ready";
-                break;
-              case "Order Ready":
-                newStatus = "Order Picked";
-                break;
-              default:
-                newStatus = order.status;
-            }
-            return { ...order, status: newStatus };
-          } else {
-            return order;
-          }
-        }),
+        orders: state.orders.map((order) =>
+          order.id === action.payload
+            ? {
+                ...order,
+                status: getNextStatus(order.status),
+                timestamp: Date.now(),
+              }
+            : order
+        ),
       };
     case CANCEL_ORDER:
       return {

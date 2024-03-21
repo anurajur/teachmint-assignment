@@ -1,32 +1,45 @@
+// src/components/OrderCard.js
 import React from "react";
 import { useDispatch } from "react-redux";
 import { advanceOrder } from "../store/actions";
-import { calculateTimeDifference } from "../utils/calculateTimeDifference";
+import {
+  calculateTimeInMinutes,
+  isOverThreeMinutes,
+} from "../utils/calculateTimeDifference";
 
 const OrderCard = ({ order }) => {
   const dispatch = useDispatch();
-  const timePassed = calculateTimeDifference(order.timePlaced);
-  const handleAdvance = (orderId) => {
-    dispatch(advanceOrder(orderId));
+
+  const handleAdvance = () => {
+    dispatch(advanceOrder(order.id));
   };
 
-  if (!order || !order.status) {
-    return null; // or some fallback UI
-  }
-
-  const statusClass = order.status.replace(/\s+/g, "-").toLowerCase();
+  const timeInMinutes = calculateTimeInMinutes(order.placementTime);
+  const cardClass =
+    isOverThreeMinutes(order.placementTime) && order.status !== "Order Picked"
+      ? "highlight-red"
+      : "";
 
   return (
-    <div className={`order-card ${statusClass}`}>
+    <div
+      className={`order-card ${order.status
+        .replace(/\s+/g, "-")
+        .toLowerCase()} ${cardClass}`}
+    >
       <div className="order-info">
-        <p>Order {order.id}</p>
-        <p>{timePassed}</p>
+        <p>Order ID: {order.id}</p>
+        <p>Status: {order.status}</p>
+        {order.status !== "Order Picked" ? (
+          <p>Time in current stage: {timeInMinutes}</p>
+        ) : (
+          <p>Order Picked</p>
+        )}
+        {order.status !== "Order Picked" && (
+          <button onClick={handleAdvance} className="next-button">
+            Next
+          </button>
+        )}
       </div>
-      {order.status !== "Order Picked" && (
-        <button onClick={() => handleAdvance(order.id)} className="next-button">
-          Next
-        </button>
-      )}
     </div>
   );
 };

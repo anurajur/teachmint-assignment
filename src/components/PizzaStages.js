@@ -1,10 +1,10 @@
+// src/components/PizzaStages.js
 import React from "react";
 import { useSelector } from "react-redux";
 import OrderCard from "./OrderCard";
 
 const PizzaStages = () => {
   const orders = useSelector((state) => state.orders);
-
   const stages = [
     "Order Placed",
     "Order in Making",

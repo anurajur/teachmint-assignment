@@ -1,12 +1,17 @@
+// src/components/MainSection.js
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cancelOrder } from "../store/actions";
-import { calculateTimeDifference } from "../utils/calculateTimeDifference";
-// ... existing imports ...
+import { calculateTimeInMinutes } from "../utils/calculateTimeDifference";
 
 const MainSection = () => {
-  const orders = useSelector((state) => state.orders);
   const dispatch = useDispatch();
+  const orders = useSelector((state) => state.orders);
+
+  // Calculate the total number of delivered pizzas
+  const totalDelivered = orders.filter(
+    (order) => order.status === "Order Picked"
+  ).length;
 
   const handleCancel = (id) => {
     dispatch(cancelOrder(id));
@@ -20,18 +25,25 @@ const MainSection = () => {
           <tr>
             <th>Order ID</th>
             <th>Stage</th>
-            <th>Total time spent (from order placed)</th>
+            <th>Total Time Spent (from order placed)</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {orders.map((order) => (
-            <tr key={order.id}>
+            <tr
+              key={order.id}
+              className={order.status === "Order Picked" ? "order-picked" : ""}
+            >
               <td>{order.id}</td>
-              <td>{order.stage}</td>
-              <td>{calculateTimeDifference(order.timePlaced)}</td>
+              <td>{order.status}</td>
               <td>
-                {order.stage !== "Order Picked" && (
+                {order.status !== "Order Picked"
+                  ? calculateTimeInMinutes(order.placementTime)
+                  : "Order Completed"}
+              </td>
+              <td>
+                {order.status !== "Order Picked" && (
                   <button
                     onClick={() => handleCancel(order.id)}
                     className="cancel-button"
@@ -45,8 +57,7 @@ const MainSection = () => {
         </tbody>
       </table>
       <div className="total-delivered">
-        <strong>Total order delivered: </strong>
-        {orders.filter((order) => order.stage === "Order Picked").length}
+        Total order delivered: {totalDelivered}
       </div>
     </div>
   );
