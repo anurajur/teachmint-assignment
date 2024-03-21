@@ -8,17 +8,14 @@ const MainSection = () => {
   const orders = useSelector((state) => state.orders);
   const [currentTime, setCurrentTime] = useState(Date.now());
 
-  // Setup an interval to update the currentTime state every second
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTime(Date.now());
-    }, 1000); // Update every second
+    }, 1000);
 
-    // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
 
-  // Calculate the total number of delivered pizzas
   const totalDelivered = orders.filter(
     (order) => order.status === "Order Picked"
   ).length;

@@ -27,24 +27,29 @@ const rootReducer = (state = initialState, action) => {
           {
             ...action.payload,
             status: "Order Placed",
-            placementTime: Date.now(), // Ensure this is a valid timestamp
-            lastStatusChange: Date.now(), // Initialize with current timestamp
+            placementTime: Date.now(),
+            lastStatusChange: Date.now(),
           },
         ],
       };
     case ADVANCE_ORDER:
-      return {
-        ...state,
-        orders: state.orders.map((order) =>
-          order.id === action.payload
-            ? {
-                ...order,
-                status: getNextStatus(order.status),
-                lastStatusChange: Date.now(), // Update timestamp on status change
-              }
-            : order
-        ),
-      };
+      const newState = state.orders.map((order) => {
+        if (order.id === action.payload) {
+          const newStatus = getNextStatus(order.status);
+          const now = Date.now();
+          return {
+            ...order,
+            status: newStatus,
+            lastStatusChange: now,
+            stageTimes: {
+              ...order.stageTimes,
+              [newStatus]: now,
+            },
+          };
+        }
+        return order;
+      });
+      return { ...state, orders: newState };
     case CANCEL_ORDER:
       return {
         ...state,

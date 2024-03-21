@@ -11,24 +11,30 @@ const OrderCard = ({ order }) => {
   const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(Date.now());
-    }, 1000); // Update every second
+    let intervalId;
+    if (order.status !== "Order Picked") {
+      intervalId = setInterval(() => {
+        setCurrentTime(Date.now());
+      }, 1000);
+    }
 
-    return () => clearInterval(timer); // Clear interval on component unmount
-  }, []);
+    return () => clearInterval(intervalId);
+  }, [order.status]);
 
   const handleAdvance = () => {
     dispatch(advanceOrder(order.id));
   };
 
   const timeInMinutesAndSeconds = calculateTimeInMinutesAndSeconds(
-    order.placementTime,
+    order.lastStatusChange,
     currentTime
   );
-  const cardClass = isOverThreeMinutes(order.placementTime, currentTime)
-    ? "highlight-red"
-    : "";
+  const overThreeMinutes = isOverThreeMinutes(
+    order.lastStatusChange,
+    currentTime
+  );
+  const cardClass =
+    overThreeMinutes && order.status !== "Order Picked" ? "highlight-red" : "";
 
   return (
     <div
@@ -38,12 +44,7 @@ const OrderCard = ({ order }) => {
     >
       <div className="order-info">
         <p>Order ID: {order.id}</p>
-        <p>Status: {order.status}</p>
-        {order.status !== "Order Picked" ? (
-          <p>Time in current stage: {timeInMinutesAndSeconds}</p>
-        ) : (
-          <p>Order Picked</p>
-        )}
+        <p>Time in current stage: {timeInMinutesAndSeconds}</p>
         {order.status !== "Order Picked" && (
           <button onClick={handleAdvance} className="next-button">
             Next
