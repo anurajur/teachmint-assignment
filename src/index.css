@@ -30,22 +30,6 @@
   width: 300px;
 }
 
-/* .order-placed {
-  background-color: #ffdddd;
-}
-
-.order-in-making {
-  background-color: #ffffdd;
-}
-
-.order-ready {
-  background-color: #ddffdd;
-}
-
-.order-picked {
-  background-color: #ddddff;
-} */
-
 .next-button {
   position: absolute;
   bottom: 10px;
@@ -62,7 +46,6 @@
   background-color: #39843c;
 }
 
-/* Rest of the styles remain the same */
 
 /* Buttons */
 .advance-button,
@@ -201,15 +184,12 @@ th {
 
 .over-three-minutes {
   border-color: red;
-  /* Example to highlight orders over 3 minutes in the same stage */
 }
 
 .order-card.over-three-minutes {
   background-color: red;
-  /* Or any shade of red you prefer */
 }
 
 .highlight-red {
   background-color: #af2b2b;
-  /* Light red background */
 }

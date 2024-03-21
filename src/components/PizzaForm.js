@@ -1,4 +1,3 @@
-// src/components/PizzaForm.js
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPizza } from "../store/actions";
@@ -27,7 +26,6 @@ const PizzaForm = () => {
 
   return (
     <form className="pizza-form" onSubmit={handleSubmit}>
-      {/* Form fields for type, size, and base */}
       <div>
         <label>
           Type:

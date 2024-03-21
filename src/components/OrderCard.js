@@ -1,4 +1,3 @@
-// src/components/OrderCard.js
 import React from "react";
 import { useDispatch } from "react-redux";
 import { advanceOrder } from "../store/actions";
@@ -16,9 +15,9 @@ const OrderCard = ({ order }) => {
 
   // Calculate time in minutes since the order was placed
   const timeInMinutes = calculateTimeInMinutes(order.placementTime);
-  // Check if the order has been in the current stage for more than 3 minutes
   const cardClass =
-    isOverThreeMinutes(order.placementTime) && order.status !== "Order Picked"
+    isOverThreeMinutes(order.lastStatusChange) &&
+    order.status !== "Order Picked"
       ? "highlight-red"
       : "";
 

@@ -1,4 +1,3 @@
-// src/store/actions.js
 export const ADD_PIZZA = "ADD_PIZZA";
 export const ADVANCE_ORDER = "ADVANCE_ORDER";
 export const CANCEL_ORDER = "CANCEL_ORDER";

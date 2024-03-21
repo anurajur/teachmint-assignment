@@ -1,4 +1,3 @@
-// src/store/reducer.js
 import { ADD_PIZZA, ADVANCE_ORDER, CANCEL_ORDER } from "./actions";
 
 const initialState = {
@@ -25,7 +24,12 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         orders: [
           ...state.orders,
-          { ...action.payload, status: "Order Placed" },
+          {
+            ...action.payload,
+            status: "Order Placed",
+            placementTime: Date.now(), // Ensure this is a valid timestamp
+            lastStatusChange: Date.now(), // Initialize with current timestamp
+          },
         ],
       };
     case ADVANCE_ORDER:
@@ -36,7 +40,7 @@ const rootReducer = (state = initialState, action) => {
             ? {
                 ...order,
                 status: getNextStatus(order.status),
-                timestamp: Date.now(),
+                lastStatusChange: Date.now(), // Update timestamp on status change
               }
             : order
         ),
