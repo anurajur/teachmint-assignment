@@ -14,7 +14,9 @@ const OrderCard = ({ order }) => {
     dispatch(advanceOrder(order.id));
   };
 
+  // Calculate time in minutes since the order was placed
   const timeInMinutes = calculateTimeInMinutes(order.placementTime);
+  // Check if the order has been in the current stage for more than 3 minutes
   const cardClass =
     isOverThreeMinutes(order.placementTime) && order.status !== "Order Picked"
       ? "highlight-red"
