@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cancelOrder } from "../store/actions";
-import { calculateTimeInMinutes } from "../utils/calculateTimeDifference";
+import { calculateTimeInMinutesAndSeconds } from "../utils/calculateTimeDifference";
 
 const MainSection = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders);
+  const [currentTime, setCurrentTime] = useState(Date.now());
+
+  // Setup an interval to update the currentTime state every second
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000); // Update every second
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   // Calculate the total number of delivered pizzas
   const totalDelivered = orders.filter(
@@ -38,7 +49,10 @@ const MainSection = () => {
               <td>{order.status}</td>
               <td>
                 {order.status !== "Order Picked"
-                  ? calculateTimeInMinutes(order.placementTime)
+                  ? calculateTimeInMinutesAndSeconds(
+                      order.placementTime,
+                      currentTime
+                    )
                   : "Order Completed"}
               </td>
               <td>
@@ -56,7 +70,7 @@ const MainSection = () => {
         </tbody>
       </table>
       <div className="total-delivered">
-        Total order delivered: {totalDelivered}
+        Total orders delivered: {totalDelivered}
       </div>
     </div>
   );

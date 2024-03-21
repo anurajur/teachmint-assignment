@@ -1,4 +1,8 @@
-export const calculateTimeInMinutes = (startTime, endTime = Date.now()) => {
+// src/utils/timeUtils.js
+export const calculateTimeInMinutesAndSeconds = (
+  startTime,
+  endTime = Date.now()
+) => {
   if (
     typeof startTime !== "number" ||
     startTime <= 0 ||
@@ -10,7 +14,8 @@ export const calculateTimeInMinutes = (startTime, endTime = Date.now()) => {
   }
   const difference = endTime - startTime;
   const minutes = Math.floor(difference / 60000);
-  return `${minutes} min`;
+  const seconds = Math.floor((difference % 60000) / 1000);
+  return `${minutes} min ${seconds < 10 ? "0" : ""}${seconds} sec`;
 };
 
 export const isOverThreeMinutes = (timestamp, endTime = Date.now()) => {

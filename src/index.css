@@ -182,14 +182,6 @@ th {
   padding-top: 10px;
 }
 
-.over-three-minutes {
-  border-color: red;
-}
-
-.order-card.over-three-minutes {
-  background-color: red;
-}
-
 .highlight-red {
-  background-color: #af2b2b;
+  background-color: #c66262;
 }

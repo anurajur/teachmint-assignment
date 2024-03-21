@@ -1,25 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { advanceOrder } from "../store/actions";
 import {
-  calculateTimeInMinutes,
+  calculateTimeInMinutesAndSeconds,
   isOverThreeMinutes,
 } from "../utils/calculateTimeDifference";
 
 const OrderCard = ({ order }) => {
   const dispatch = useDispatch();
+  const [currentTime, setCurrentTime] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000); // Update every second
+
+    return () => clearInterval(timer); // Clear interval on component unmount
+  }, []);
 
   const handleAdvance = () => {
     dispatch(advanceOrder(order.id));
   };
 
-  // Calculate time in minutes since the order was placed
-  const timeInMinutes = calculateTimeInMinutes(order.placementTime);
-  const cardClass =
-    isOverThreeMinutes(order.lastStatusChange) &&
-    order.status !== "Order Picked"
-      ? "highlight-red"
-      : "";
+  const timeInMinutesAndSeconds = calculateTimeInMinutesAndSeconds(
+    order.placementTime,
+    currentTime
+  );
+  const cardClass = isOverThreeMinutes(order.placementTime, currentTime)
+    ? "highlight-red"
+    : "";
 
   return (
     <div
@@ -31,7 +40,7 @@ const OrderCard = ({ order }) => {
         <p>Order ID: {order.id}</p>
         <p>Status: {order.status}</p>
         {order.status !== "Order Picked" ? (
-          <p>Time in current stage: {timeInMinutes}</p>
+          <p>Time in current stage: {timeInMinutesAndSeconds}</p>
         ) : (
           <p>Order Picked</p>
         )}
